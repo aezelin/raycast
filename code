@@ -1,0 +1,295 @@
+/* ==========================================================================
+  Composant Rebonds articles
+========================================================================== */
+
+/*
+ * Description :
+ * -
+ * Auteur :
+ * - AE
+ * Historique :
+ * - 2023-07-17 : Création
+ * Sommaire :
+ *
+ */
+@use 'sass:math';
+@use 'sass:map';
+@use 'sass:list';
+@use '../utils/utils';
+
+.cc {
+    &.ctxt-home {
+        .page__element {
+            &.corpo {
+                padding: utils.rem(24);
+                @include utils.mq(m) {
+                    padding: utils.rem(80 0);
+                }
+
+                &.uni {
+                    background-color: utils.color(primary, 400);
+                }
+
+                &.ray {
+                    $purple: rgb(232 121 249);
+                    $blue: rgb(96 165 250);
+                    $green: rgb(94 234 212);
+
+                    $animationtime: 45s;
+                    $length: 25;
+
+                    height: 100%;
+                    width: 0;
+                    top: 0;
+                    position: absolute;
+                    transform: rotate(10deg);
+                    transform-origin: top right;
+                    @for $i from 1 through $length {
+                        &:nth-child(#{$i}) {
+                            $colors: 0;
+                            $r: random(6);
+                            @if $r == 1 {
+                                $colors: $purple, $blue, $green;
+                            } @else if $r == 2 {
+                                $colors: $purple, $green, $blue;
+                            } @else if $r == 3 {
+                                $colors: $green, $purple, $blue;
+                            } @else if $r == 4 {
+                                $colors: $green, $blue, $purple;
+                            } @else if $r == 5 {
+                                $colors: $blue, $green, $purple;
+                            } @else if $r == 6 {
+                                $colors: $blue, $purple, $green;
+                            }
+                            box-shadow:
+                                -130px 0 80px 40px white,
+                                -50px 0 50px 25px nth($colors, 1),
+                                0 0 50px 25px nth($colors, 2),
+                                50px 0 50px 25px nth($colors, 3),
+                                130px 0 80px 40px white;
+
+                            animation: #{$animationtime - math.div($animationtime, $length) /
+                                2 *
+                                $i}
+                                linear
+                                infinite
+                                slide;
+                            animation-delay: -#{math.div($i, $length) * $animationtime};
+                        }
+                    }
+
+                    @keyframes slide {
+                        from {
+                            right: -25vw;
+                        }
+                        to {
+                            right: 125vw;
+                        }
+                    }
+                }
+            }
+        }
+        .corpo {
+            &__container {
+                width: 100%;
+                max-width: 100%;
+                margin: 0 auto;
+                padding: utils.rem(24);
+
+                background-color: utils.color(usual, white);
+
+                @include utils.mq(m) {
+                    margin: 0 auto;
+                    max-width: utils.rem(1366);
+
+                    padding: utils.rem(24 48);
+                }
+            }
+
+            &__title {
+                position: relative;
+                margin-bottom: utils.rem(16);
+                padding-left: utils.rem(42);
+                font-size: utils.rem(36);
+                line-height: utils.rem(28);
+            }
+
+            &__content-container {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+                align-items: stretch;
+                padding: 0;
+
+                @include utils.mq(m) {
+                    flex-direction: row;
+                    gap: 32px;
+                }
+            }
+
+            &__content,
+            &__stack {
+                width: 100%;
+                padding: 0;
+
+                @include utils.mq(m) {
+                    width: 50%;
+                }
+            }
+
+            &__content {
+                .button {
+                    margin-top: 32px;
+                }
+            }
+
+            &__stack {
+                z-index: 20;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 32px 0 0;
+
+                @include utils.mq(m) {
+                    justify-content: flex-end;
+                    margin: 0;
+                }
+
+                .missions__slides-container {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+
+                    &.splide {
+                        visibility: visible;
+
+                        &.is-initialized {
+                            .focus.splide__list {
+                                display: flex;
+                            }
+                        }
+
+                        &__track {
+                            padding: 16px;
+                        }
+                    }
+
+                    .splide__track {
+                        padding: 0;
+                    }
+
+                    .splide__pagination {
+                        display: none !important;
+                    }
+
+                    .splide__arrows {
+                        position: absolute;
+                        bottom: utils.rem(40);
+                        z-index: 30;
+                        width: 100%;
+                    }
+                }
+
+                .splide__arrow {
+                    width: 40px;
+                    height: 40px;
+                    border: none;
+                    background: transparent !important;
+
+                    svg {
+                        display: none;
+                    }
+                }
+
+                .splide__arrow--prev,
+                .splide__arrow--next {
+                    &::before {
+                        content: '';
+                        cursor: pointer;
+                    }
+
+                    &::after {
+                        content: none;
+                    }
+                }
+
+                .splide__arrow--next {
+                    &::before {
+                        @include utils.getIcon(play, 24);
+
+                        content: '';
+                        background-color: utils.color(usual, white);
+                    }
+                }
+
+                .splide__arrow--prev {
+                    &::before {
+                        @include utils.getIcon(play, 24);
+
+                        content: '';
+                        background-color: utils.color(usual, white);
+                        transform: rotate(180deg);
+                    }
+                }
+
+                .tile__missions {
+                    &__list {
+                        position: relative;
+                        z-index: 20;
+                        width: 100%;
+                        padding: utils.rem(60);
+
+                        @include utils.mq(m) {
+                            padding: 0;
+                        }
+                    }
+
+                    &__item {
+                        display: flex;
+                        flex-direction: column;
+                        gap: utils.rem(32);
+                        align-items: center;
+                        width: 100%;
+                        margin: 0;
+                        padding: utils.rem(0 32);
+                        color: utils.color(usual, white);
+                        text-align: center;
+
+                        img {
+                            max-height: utils.rem(220);
+                            margin-bottom: utils.rem(20);
+                        }
+
+                        &--icon {
+                            width: utils.rem(65);
+                            height: utils.rem(65);
+                        }
+
+                        &--missions {
+                            font-weight: 700;
+                            font-style: normal;
+                            font-size: 40px;
+                            font-family: utils.$secondary-font;
+                            line-height: normal;
+                        }
+
+                        &--content {
+                            color: utils.color(usual, white);
+                            font-weight: 400;
+                            font-size: utils.rem(16);
+                            line-height: utils.rem(32);
+                        }
+
+                        &--title {
+                            margin-bottom: utils.rem(16);
+                            color: utils.color(usual, white);
+                            font-weight: 700;
+                            font-size: utils.rem(32);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
